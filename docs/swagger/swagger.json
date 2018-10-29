@@ -1,0 +1,472 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "{{.Description}}",
+        "title": "{{.Title}}",
+        "contact": {},
+        "license": {},
+        "version": "{{.Version}}"
+    },
+    "host": "{{.Host}}",
+    "basePath": "{{.BasePath}}",
+    "paths": {
+        "/payment": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get all payments",
+                "operationId": "get-payments",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.PaymentResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates new payment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Creates new payment",
+                "operationId": "create-payment",
+                "parameters": [
+                    {
+                        "description": "New tag",
+                        "name": "new-tag",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.CreatePaymentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Tag created",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.CreatePaymentResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/payment/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a payment for given Id",
+                "operationId": "get-payment",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.PaymentResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update a payment for given Id - partial payment is not supported",
+                "operationId": "update-payment",
+                "responses": {
+                    "204": {
+                        "description": "Payment updated"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a payment for given Id",
+                "operationId": "delete-payment",
+                "responses": {
+                    "204": {
+                        "description": "Payment deleted"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Charge": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ChargesInformation": {
+            "type": "object",
+            "properties": {
+                "bearerCode": {
+                    "type": "string"
+                },
+                "receiver_charges_amount": {
+                    "type": "number"
+                },
+                "receiver_charges_currency": {
+                    "type": "string"
+                },
+                "senderCharges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Charge"
+                    }
+                }
+            }
+        },
+        "model.CreatePaymentRequest": {
+            "type": "object",
+            "required": [
+                "amount",
+                "bearer_code",
+                "organisation_id"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "bearer_code": {
+                    "type": "string"
+                },
+                "beneficiary_party": {
+                    "type": "object",
+                    "$ref": "#/definitions/model.Party"
+                },
+                "debtor_party": {
+                    "type": "object",
+                    "$ref": "#/definitions/model.Party"
+                },
+                "end_to_end_reference": {
+                    "type": "string"
+                },
+                "numeric_reference": {
+                    "type": "string"
+                },
+                "organisation_id": {
+                    "type": "string"
+                },
+                "payment_id": {
+                    "type": "string"
+                },
+                "payment_purpose": {
+                    "type": "string"
+                },
+                "payment_scheme": {
+                    "type": "string"
+                },
+                "payment_type": {
+                    "type": "string"
+                },
+                "reference": {
+                    "type": "string"
+                },
+                "scheme_payment_sub_type": {
+                    "type": "string"
+                },
+                "scheme_payment_type": {
+                    "type": "string"
+                },
+                "sponsor_party": {
+                    "type": "object",
+                    "$ref": "#/definitions/model.SponsorParty"
+                }
+            }
+        },
+        "model.CreatePaymentResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "organisation_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ForeignExchange": {
+            "type": "object",
+            "properties": {
+                "contract_reference": {
+                    "type": "string"
+                },
+                "exchange_rate": {
+                    "type": "number"
+                },
+                "original_amount": {
+                    "type": "number"
+                },
+                "original_currency": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Party": {
+            "type": "object",
+            "properties": {
+                "accountName": {
+                    "type": "string"
+                },
+                "accountNumber": {
+                    "type": "string"
+                },
+                "account_number_code": {
+                    "type": "string"
+                },
+                "account_type": {
+                    "type": "integer"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "bank_id:": {
+                    "type": "string"
+                },
+                "bank_id_code": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Payment": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "beneficiaryParty": {
+                    "type": "object",
+                    "$ref": "#/definitions/model.Party"
+                },
+                "charges_information": {
+                    "type": "object",
+                    "$ref": "#/definitions/model.ChargesInformation"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "debtor_party": {
+                    "type": "object",
+                    "$ref": "#/definitions/model.Party"
+                },
+                "end_to_end_reference": {
+                    "type": "string"
+                },
+                "fx": {
+                    "type": "object",
+                    "$ref": "#/definitions/model.ForeignExchange"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "numeric_reference": {
+                    "type": "string"
+                },
+                "organisation_id": {
+                    "type": "string"
+                },
+                "payment_id": {
+                    "type": "string"
+                },
+                "payment_purpose": {
+                    "type": "string"
+                },
+                "payment_scheme": {
+                    "type": "string"
+                },
+                "payment_type": {
+                    "type": "string"
+                },
+                "processing_date": {
+                    "type": "string"
+                },
+                "reference": {
+                    "type": "string"
+                },
+                "scheme_payment_sub_type": {
+                    "type": "string"
+                },
+                "scheme_payment_type": {
+                    "type": "string"
+                },
+                "sponsor_party": {
+                    "type": "object",
+                    "$ref": "#/definitions/model.SponsorParty"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.PaymentResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Payment"
+                    }
+                },
+                "self": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SponsorParty": {
+            "type": "object",
+            "properties": {
+                "account_number": {
+                    "type": "string"
+                },
+                "bank_id": {
+                    "type": "string"
+                },
+                "bank_id_code": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

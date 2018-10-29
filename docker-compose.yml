@@ -1,0 +1,27 @@
+version: '3.3'
+
+services:
+  api:
+    build: .
+    container_name: payement-service
+    image: form3/payment-service
+    ports:
+      - "${EXPOSED_PORT}:8080"
+    networks:
+      - overlay
+    depends_on:
+      - mongo
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+      - MONGO_URI=${MONGO_URI}
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "${MONGO_PORT}:27017"
+    networks:
+      - overlay
+
+networks:
+  overlay:

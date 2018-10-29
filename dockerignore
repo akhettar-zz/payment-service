@@ -1,0 +1,17 @@
+.idea
+.git
+.gitignore
+.dockerignore
+.editorconfig
+.env
+
+test/
+scripts/
+
+**/*_test.go
+**/*.png
+coverage*
+
+README.md
+Dockerfile
+docker-compose.yml

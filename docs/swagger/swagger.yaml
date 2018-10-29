@@ -1,0 +1,320 @@
+basePath: '{{.BasePath}}'
+definitions:
+  model.Charge:
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+    type: object
+  model.ChargesInformation:
+    properties:
+      bearerCode:
+        type: string
+      receiver_charges_amount:
+        type: number
+      receiver_charges_currency:
+        type: string
+      senderCharges:
+        items:
+          $ref: '#/definitions/model.Charge'
+        type: array
+    type: object
+  model.CreatePaymentRequest:
+    properties:
+      amount:
+        type: number
+      bearer_code:
+        type: string
+      beneficiary_party:
+        $ref: '#/definitions/model.Party'
+        type: object
+      debtor_party:
+        $ref: '#/definitions/model.Party'
+        type: object
+      end_to_end_reference:
+        type: string
+      numeric_reference:
+        type: string
+      organisation_id:
+        type: string
+      payment_id:
+        type: string
+      payment_purpose:
+        type: string
+      payment_scheme:
+        type: string
+      payment_type:
+        type: string
+      reference:
+        type: string
+      scheme_payment_sub_type:
+        type: string
+      scheme_payment_type:
+        type: string
+      sponsor_party:
+        $ref: '#/definitions/model.SponsorParty'
+        type: object
+    required:
+    - amount
+    - bearer_code
+    - organisation_id
+    type: object
+  model.CreatePaymentResponse:
+    properties:
+      id:
+        type: string
+      organisation_id:
+        type: string
+    type: object
+  model.ErrorResponse:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  model.ForeignExchange:
+    properties:
+      contract_reference:
+        type: string
+      exchange_rate:
+        type: number
+      original_amount:
+        type: number
+      original_currency:
+        type: string
+    type: object
+  model.Party:
+    properties:
+      account_number_code:
+        type: string
+      account_type:
+        type: integer
+      accountName:
+        type: string
+      accountNumber:
+        type: string
+      address:
+        type: string
+      'bank_id:':
+        type: string
+      bank_id_code:
+        type: string
+      currency:
+        type: string
+      name:
+        type: string
+    type: object
+  model.Payment:
+    properties:
+      amount:
+        type: number
+      beneficiaryParty:
+        $ref: '#/definitions/model.Party'
+        type: object
+      charges_information:
+        $ref: '#/definitions/model.ChargesInformation'
+        type: object
+      currency:
+        type: string
+      debtor_party:
+        $ref: '#/definitions/model.Party'
+        type: object
+      end_to_end_reference:
+        type: string
+      fx:
+        $ref: '#/definitions/model.ForeignExchange'
+        type: object
+      id:
+        type: string
+      numeric_reference:
+        type: string
+      organisation_id:
+        type: string
+      payment_id:
+        type: string
+      payment_purpose:
+        type: string
+      payment_scheme:
+        type: string
+      payment_type:
+        type: string
+      processing_date:
+        type: string
+      reference:
+        type: string
+      scheme_payment_sub_type:
+        type: string
+      scheme_payment_type:
+        type: string
+      sponsor_party:
+        $ref: '#/definitions/model.SponsorParty'
+        type: object
+      type:
+        type: string
+      version:
+        type: integer
+    type: object
+  model.PaymentResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.Payment'
+        type: array
+      self:
+        type: string
+    type: object
+  model.SponsorParty:
+    properties:
+      account_number:
+        type: string
+      bank_id:
+        type: string
+      bank_id_code:
+        type: string
+    type: object
+host: '{{.Host}}'
+info:
+  contact: {}
+  description: '{{.Description}}'
+  license: {}
+  title: '{{.Title}}'
+  version: '{{.Version}}'
+paths:
+  /payment:
+    get:
+      consumes:
+      - application/json
+      operationId: get-payments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/model.PaymentResponse'
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+      summary: Get all payments
+    post:
+      consumes:
+      - application/json
+      description: Creates new payment
+      operationId: create-payment
+      parameters:
+      - description: New tag
+        in: body
+        name: new-tag
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatePaymentRequest'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Tag created
+          schema:
+            $ref: '#/definitions/model.CreatePaymentResponse'
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+      summary: Creates new payment
+  /payment/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-payment
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Payment deleted
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+      summary: Delete a payment for given Id
+    get:
+      consumes:
+      - application/json
+      operationId: get-payment
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/model.PaymentResponse'
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+      summary: Get a payment for given Id
+    put:
+      consumes:
+      - application/json
+      operationId: update-payment
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Payment updated
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+            type: object
+      summary: Update a payment for given Id - partial payment is not supported
+swagger: "2.0"

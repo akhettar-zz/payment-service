@@ -1,0 +1,40 @@
+{"organisation_id": "743d5b63-8e6f-432e-a8fa-c5d8d2ee5fcb",
+  "beneficiary_party": {
+    "AccountName": "W Owens",
+    "AccountNumber": "31926819",
+    "account_number_code": "BBAN",
+    "account_type": 0,
+    "address": "1 The Beneficiary Localtown SE2",
+    "bank_id:": "403000",
+    "bank_id_code": "GBDSC",
+    "name": "Wilfred Jeremiah Owens",
+    "currency": "USD"
+  },
+  "debtor_party": {
+    "AccountName": "EJ Brown Black",
+    "AccountNumber": "GB29XABC10161234567801",
+    "account_number_code": "IBAN",
+    "account_type": 0,
+    "address": "10 Debtor Crescent Sourcetown NE1",
+    "bank_id:": "203301",
+    "bank_id_code": "GBDSC",
+    "name": "Emelia Jane Brown",
+    "currency": "GBP"
+  },
+  "payment_purpose": "Paying for goods/services",
+  "payment_scheme": "FPS",
+  "payment_type": "Credit",
+  "reference": "Payment for Em's piano lessons",
+  "end_to_end_reference": "",
+  "scheme_payment_sub_type": "InternetBanking",
+  "scheme_payment_type": "ImmediatePayment",
+  "sponsor_party": {
+    "account_number": "56781234",
+    "bank_id": "123123",
+    "bank_id_code": "GBDSC"
+  },
+  "numeric_reference": "",
+  "payment_id": "",
+  "amount": 200.42,
+  "bearer_code": "SHAR"
+}
