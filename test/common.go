@@ -96,17 +96,17 @@ func CreatePaymentAndAssertResponse(t *testing.T, handler *api.PaymentHandler) m
 // Helper function to build CreatePaymentRequest
 func CreatePaymentRequest(beneficiaryAccNum, debtorAccNum, beneficiaryCurrency string) model.CreatePaymentRequest {
 	beneficiary := model.Party{AccountName: "W Owens", AccountNumber: beneficiaryAccNum, AccountNumberCode: "BBAN",
-		AccountType: 0, Address: "1 The Beneficiary Localtown SE2", BankId: "403000", BankIdCode: "GBDSC",
+		AccountType: 0, Address: "1 The Beneficiary Localtown SE2", BankID: "403000", BankIDCode: "GBDSC",
 		Name: "Wilfred Jeremiah Owens", Currency: beneficiaryCurrency}
 
 	debtor := model.Party{AccountName: "EJ Brown Black", AccountNumber: debtorAccNum, AccountNumberCode: "IBAN",
-		AccountType: 0, Address: "10 Debtor Crescent Sourcetown NE1", BankId: "203301", BankIdCode: "GBDSC",
+		AccountType: 0, Address: "10 Debtor Crescent Sourcetown NE1", BankID: "203301", BankIDCode: "GBDSC",
 		Name: "Emelia Jane Brown", Currency: "GBP"}
 
 	return model.CreatePaymentRequest{OrganisationID: "743d5b63-8e6f-432e-a8fa-c5d8d2ee5fcb",
 		Amount: 200.42, BeneficiaryParty: beneficiary, DebtorParty: debtor, PaymentPurpose: "Paying for goods/services",
 		PaymentScheme: "FPS", PaymentType: "Credit", Reference: "Payment for Em's piano lessons",
 		SchemePaymentSubType: "InternetBanking", SchemePaymentType: "ImmediatePayment",
-		SponsorParty: model.SponsorParty{AccountNumber: "56781234", BankId: "123123", BankIdCode: "GBDSC"},
+		SponsorParty: model.SponsorParty{AccountNumber: "56781234", BankID: "123123", BankIDCode: "GBDSC"},
 		BearerCode:   "SHAR", ProcessingDate: time.Now()}
 }

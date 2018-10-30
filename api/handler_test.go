@@ -56,10 +56,10 @@ func TestPaymentHandler_CreatePayment(t *testing.T) {
 
 			var response model.CreatePaymentResponse
 			json.NewDecoder(w.Body).Decode(&response)
-			if response.Id != "" {
-				t.Logf("\t\tThe response should contain payment id. %v %v", response.Id, test.CheckMark)
+			if response.ID != "" {
+				t.Logf("\t\tThe response should contain payment id. %v %v", response.ID, test.CheckMark)
 			} else {
-				t.Errorf("\t\tThe response should contain payment id. %v %v", response.Id, test.BallotX)
+				t.Errorf("\t\tThe response should contain payment id. %v %v", response.ID, test.BallotX)
 			}
 		}
 	}
@@ -85,10 +85,10 @@ func TestPaymentHandler_CreatePaymentForeignExchangeNotRequired(t *testing.T) {
 
 			var response model.CreatePaymentResponse
 			json.NewDecoder(w.Body).Decode(&response)
-			if response.Id != "" {
-				t.Logf("\t\tThe response should contain payment id. %v %v", response.Id, test.CheckMark)
+			if response.ID != "" {
+				t.Logf("\t\tThe response should contain payment id. %v %v", response.ID, test.CheckMark)
 			} else {
-				t.Errorf("\t\tThe response should contain payment id. %v %v", response.Id, test.BallotX)
+				t.Errorf("\t\tThe response should contain payment id. %v %v", response.ID, test.BallotX)
 			}
 		}
 	}
@@ -157,7 +157,7 @@ func TestPaymentHandler_QueryAllShouldReturnAllPayment(t *testing.T) {
 }
 
 func TestPaymentHandler_QueryForAGivenPaymentIdShouldReturn200(t *testing.T) {
-	t.Logf("Given the need to Query a payment for given payment Id")
+	t.Logf("Given the need to Query a payment for given payment ID")
 	{
 		t.Logf("\tWhen sending Query Payment request to endpoint %s", "\\payment")
 		{
@@ -166,7 +166,7 @@ func TestPaymentHandler_QueryForAGivenPaymentIdShouldReturn200(t *testing.T) {
 			// create first payment
 			res := test.CreatePaymentAndAssertResponse(t, handler)
 
-			req, err := test.HttpRequest(nil, "/payment/"+res.Id, http.MethodGet)
+			req, err := test.HttpRequest(nil, "/payment/"+res.ID, http.MethodGet)
 			router := handler.NewRouter()
 			w := httptest.NewRecorder()
 
@@ -176,17 +176,17 @@ func TestPaymentHandler_QueryForAGivenPaymentIdShouldReturn200(t *testing.T) {
 
 			var response model.PaymentResponse
 			json.NewDecoder(w.Body).Decode(&response)
-			if response.Data[0].Id.Hex() == res.Id {
-				t.Logf("\t\tThe payment Id should be %v %v", res.Id, test.CheckMark)
+			if response.Data[0].ID.Hex() == res.ID {
+				t.Logf("\t\tThe payment ID should be %v %v", res.ID, test.CheckMark)
 			} else {
-				t.Errorf("\t\tThe payment Id should be %v %v %v", res.Id, test.BallotX, response.Data[0].Id)
+				t.Errorf("\t\tThe payment ID should be %v %v %v", res.ID, test.BallotX, response.Data[0].ID)
 			}
 		}
 	}
 }
 
 func TestPaymentHandler_QueryForAGivenDummyID_ShouldReturnNotFound(t *testing.T) {
-	t.Logf("Given the need to Query a payment for given payment Id")
+	t.Logf("Given the need to Query a payment for given payment ID")
 	{
 		t.Logf("\tWhen sending Query Payment request to endpoint %s", "\\payment")
 		{
@@ -204,7 +204,7 @@ func TestPaymentHandler_QueryForAGivenDummyID_ShouldReturnNotFound(t *testing.T)
 }
 
 func TestPaymentHandler_DeleteShouldDeleteTheGivenPayment(t *testing.T) {
-	t.Logf("Given the need to Query a payment for given payment Id")
+	t.Logf("Given the need to Query a payment for given payment ID")
 	{
 		t.Logf("\tWhen sending Query Payment request to endpoint %s", "\\payment")
 		{
@@ -214,7 +214,7 @@ func TestPaymentHandler_DeleteShouldDeleteTheGivenPayment(t *testing.T) {
 			res := test.CreatePaymentAndAssertResponse(t, handler)
 
 			// Assert the record exist
-			req, err := test.HttpRequest(nil, "/payment/"+res.Id, http.MethodGet)
+			req, err := test.HttpRequest(nil, "/payment/"+res.ID, http.MethodGet)
 			router := handler.NewRouter()
 			w := httptest.NewRecorder()
 
@@ -224,7 +224,7 @@ func TestPaymentHandler_DeleteShouldDeleteTheGivenPayment(t *testing.T) {
 
 			// delete the resource
 			w = httptest.NewRecorder()
-			req, err = test.HttpRequest(nil, "/payment/"+res.Id, http.MethodDelete)
+			req, err = test.HttpRequest(nil, "/payment/"+res.ID, http.MethodDelete)
 			router.ServeHTTP(w, req)
 
 			// assert successful delete
@@ -234,7 +234,7 @@ func TestPaymentHandler_DeleteShouldDeleteTheGivenPayment(t *testing.T) {
 }
 
 func TestPaymentHandler_ForPaymentNotFoundDeleteShouldReturn404(t *testing.T) {
-	t.Logf("Given the need to Query a payment for given payment Id")
+	t.Logf("Given the need to Query a payment for given payment ID")
 	{
 		t.Logf("\tWhen sending Query Payment request to endpoint %s", "\\payment")
 		{
@@ -244,7 +244,7 @@ func TestPaymentHandler_ForPaymentNotFoundDeleteShouldReturn404(t *testing.T) {
 			res := test.CreatePaymentAndAssertResponse(t, handler)
 
 			// Assert the record exist
-			req, err := test.HttpRequest(nil, "/payment/"+res.Id, http.MethodGet)
+			req, err := test.HttpRequest(nil, "/payment/"+res.ID, http.MethodGet)
 			router := handler.NewRouter()
 			w := httptest.NewRecorder()
 
@@ -275,7 +275,7 @@ func TestPaymentHandler_SuccessfulUpdatePaymentShouldReturn204(t *testing.T) {
 			// update payment
 			newDebtorAccNum := "GB29XABC101613434343"
 			update := test.CreatePaymentRequest(beneficiaryAccountNum, newDebtorAccNum, beneficiaryCurrency)
-			req, err := test.HttpRequest(update, "/payment/"+res.Id, http.MethodPut)
+			req, err := test.HttpRequest(update, "/payment/"+res.ID, http.MethodPut)
 
 			w := httptest.NewRecorder()
 			router := handler.NewRouter()
@@ -283,7 +283,7 @@ func TestPaymentHandler_SuccessfulUpdatePaymentShouldReturn204(t *testing.T) {
 
 			test.AssertForCallErrorAndHttpStatusCode(err, t, w.Code, http.StatusNoContent)
 
-			req, err = test.HttpRequest(nil, "/payment/"+res.Id, http.MethodGet)
+			req, err = test.HttpRequest(nil, "/payment/"+res.ID, http.MethodGet)
 			w = httptest.NewRecorder()
 
 			router.ServeHTTP(w, req)

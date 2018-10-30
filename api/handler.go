@@ -80,7 +80,7 @@ func (h *PaymentHandler) CreatePayment(c *gin.Context) {
 
 	// persisting payment into database
 	payment := buildPayment(amount, fx, charges, req)
-	logger.Info.Printf("Storing payment with Id %s", payment.Id.Hex())
+	logger.Info.Printf("Storing payment with ID %s", payment.ID.Hex())
 	err := h.repo.Insert(DatabaseName, CollectionName, payment)
 
 	if err != nil {
@@ -91,7 +91,7 @@ func (h *PaymentHandler) CreatePayment(c *gin.Context) {
 
 	// if all good create success response
 	c.Writer.Header().Set(ContentType, mime.TypeByExtension("json"))
-	c.JSON(http.StatusCreated, model.CreatePaymentResponse{Id: payment.Id.Hex(), OrganisationId: payment.OrganisationId})
+	c.JSON(http.StatusCreated, model.CreatePaymentResponse{ID: payment.ID.Hex(), OrganisationId: payment.OrganisationId})
 }
 
 // @Summary Get all payments
@@ -117,7 +117,7 @@ func (h *PaymentHandler) FindAllPayments(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// @Summary Get a payment for given Id
+// @Summary Get a payment for given ID
 // @ID get-payment
 // @Accept  json
 // @Produce  json
@@ -129,7 +129,7 @@ func (h *PaymentHandler) FindAllPayments(c *gin.Context) {
 func (h *PaymentHandler) FindPayment(c *gin.Context) {
 
 	id := c.Params.ByName(ID)
-	logger.Info.Printf("Received request to query a payment for a given Id %s", id)
+	logger.Info.Printf("Received request to query a payment for a given ID %s", id)
 	resp, err := h.repo.Find(DatabaseName, CollectionName, bson.ObjectIdHex(id))
 
 	if err != nil {
@@ -142,7 +142,7 @@ func (h *PaymentHandler) FindPayment(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// @Summary Delete a payment for given Id
+// @Summary Delete a payment for given ID
 // @ID delete-payment
 // @Accept  json
 // @Produce  json
@@ -153,7 +153,7 @@ func (h *PaymentHandler) FindPayment(c *gin.Context) {
 // @Router /payment/{id} [delete]
 func (h *PaymentHandler) DeletePayment(c *gin.Context) {
 	id := c.Params.ByName(ID)
-	logger.Info.Printf("Received request to delete a payment for a given Id %s", id)
+	logger.Info.Printf("Received request to delete a payment for a given ID %s", id)
 
 	// query the payment first
 	_, errQ := h.repo.Find(DatabaseName, CollectionName, bson.ObjectIdHex(id))
@@ -174,7 +174,7 @@ func (h *PaymentHandler) DeletePayment(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
-// @Summary Update a payment for given Id - partial payment is not supported
+// @Summary Update a payment for given ID - partial payment is not supported
 // @ID update-payment
 // @Accept  json
 // @Produce  json
@@ -195,7 +195,7 @@ func (h *PaymentHandler) UpdatePayment(c *gin.Context) {
 		return
 	}
 
-	logger.Info.Printf("Received request to update payment for payment Id: %s", id)
+	logger.Info.Printf("Received request to update payment for payment ID: %s", id)
 
 	// Get exchange rate from the mock service
 	fx := model.ForeignExchange{ExchangeRate: 1.0}
@@ -212,7 +212,7 @@ func (h *PaymentHandler) UpdatePayment(c *gin.Context) {
 
 	// persisting payment into database
 	payment := updatePayment(amount, fx, charges, req, bson.ObjectIdHex(id))
-	logger.Info.Printf("Updating payment with Id %s", payment.Id.Hex())
+	logger.Info.Printf("Updating payment with ID %s", payment.ID.Hex())
 	err := h.repo.Update(DatabaseName, CollectionName, bson.ObjectIdHex(id), payment)
 	if err != nil {
 		logger.Error.Println(err.Error())
@@ -261,13 +261,13 @@ func buildPayment(amount float64, fx model.ForeignExchange, charges model.Charge
 
 	attr := buildAttr(amount, req, charges, fx)
 
-	return model.Payment{Type: "Payment", Id: bson.NewObjectId(), OrganisationId: req.OrganisationID, Attributes: attr, Version: 0}
+	return model.Payment{Type: "Payment", ID: bson.NewObjectId(), OrganisationId: req.OrganisationID, Attributes: attr, Version: 0}
 }
 
 // Helper function to build payment instance
 func updatePayment(amount float64, fx model.ForeignExchange, charges model.ChargesInformation, req model.CreatePaymentRequest, oid bson.ObjectId) model.Payment {
 	attr := buildAttr(amount, req, charges, fx)
-	return model.Payment{Type: "Payment", Id: oid, OrganisationId: req.OrganisationID, Attributes: attr, Version: 0}
+	return model.Payment{Type: "Payment", ID: oid, OrganisationId: req.OrganisationID, Attributes: attr, Version: 0}
 }
 
 // Helper function to determine if foreign exchange to this payment is relevant

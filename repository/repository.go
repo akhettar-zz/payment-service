@@ -22,13 +22,13 @@ type Repository interface {
 	// Find all the notes
 	FindAll(db, col string) (model.PaymentResponse, error)
 
-	// Find a payment for a given Id
+	// Find a payment for a given ID
 	Find(db, col string, oid bson.ObjectId) (model.PaymentResponse, error)
 
-	// Delete a payment for a given Id
+	// Delete a payment for a given ID
 	Delete(db, col string, oid bson.ObjectId) error
 
-	// Update a payment for given Id
+	// Update a payment for given ID
 	Update(db, col string, oid bson.ObjectId, content interface{}) error
 }
 

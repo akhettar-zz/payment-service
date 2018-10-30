@@ -21,7 +21,7 @@ type HealthResponse struct {
 	Message string `json:"message"`
 }
 
-// CreatePaymentRequest
+// CreatePaymentRequest paylod for creating payment
 type CreatePaymentRequest struct {
 	OrganisationID       string       `json:"organisation_id" binding:"required"`
 	BeneficiaryParty     Party        `json:"beneficiary_party" binding:"required"`
@@ -41,11 +41,13 @@ type CreatePaymentRequest struct {
 	ProcessingDate       time.Time    `json:"processing_date"`
 }
 
+// CreatePaymentResponse create payment response
 type CreatePaymentResponse struct {
-	Id             string `json:"id"`
+	ID             string `json:"id"`
 	OrganisationId string `json:"organisation_id"`
 }
 
+// Links containing hyper media link
 type Links struct {
 	Self string `json: "self"`
 }
@@ -53,12 +55,13 @@ type Links struct {
 // Payment type
 type Payment struct {
 	Type           string        `json:"type"`
-	Id             bson.ObjectId `json:"id" bson:"_id,omitempty"`
+	ID             bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	Version        int           `json:"version"`
 	OrganisationId string        `json:"organisation_id"`
 	Attributes     `json: "attributes"`
 }
 
+// Attributes payment attributes
 type Attributes struct {
 	Amount               float64            `json:"amount"`
 	BeneficiaryParty     Party              `json:"beneficiary_party`
@@ -79,29 +82,33 @@ type Attributes struct {
 	SponsorParty         SponsorParty       `json:"sponsor_party"`
 }
 
+// SponsorParty type
 type SponsorParty struct {
 	AccountNumber string `json:"account_number"`
-	BankId        string `json:"bank_id"`
-	BankIdCode    string `json:"bank_id_code"`
+	BankID        string `json:"bank_id"`
+	BankIDCode    string `json:"bank_id_code"`
 }
 
+//Party party type to hold beneficiary or debtor details
 type Party struct {
 	AccountName       string `json:"account_name`
 	AccountNumber     string `json:"account_number`
 	AccountNumberCode string `json:"account_number_code"`
 	AccountType       int    `json:"account_type", omitempty`
 	Address           string `json:"address"`
-	BankId            string `json:"bank_id:"`
-	BankIdCode        string `json:"bank_id_code"`
+	BankID            string `json:"bank_id:"`
+	BankIDCode        string `json:"bank_id_code"`
 	Name              string `json:"name"`
 	Currency          string `json:"currency", omitempty`
 }
 
+// Charge type
 type Charge struct {
 	Amount   float64 `json:"amount"`
 	Currency string  `json:"currency"`
 }
 
+// ChargesInformation type to hold bank charges details
 type ChargesInformation struct {
 	BearerCode              string   `json:"bearer_code`
 	SenderCharges           []Charge `json:"sender_charges`
@@ -109,6 +116,7 @@ type ChargesInformation struct {
 	ReceiverChargesCurrency string   `json:"receiver_charges_currency"`
 }
 
+//ForeignExchange type to hold exchange rate details
 type ForeignExchange struct {
 	ContactReference string  `json:"contract_reference"`
 	ExchangeRate     float64 `json:"exchange_rate"`
@@ -116,4 +124,5 @@ type ForeignExchange struct {
 	OriginalCurrency string  `json:"original_currency"`
 }
 
+// EmptyBody type
 type EmptyBody struct{}

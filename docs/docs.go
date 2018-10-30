@@ -109,7 +109,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get a payment for given Id",
+                "summary": "Get a payment for given ID",
                 "operationId": "get-payment",
                 "responses": {
                     "200": {
@@ -149,7 +149,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update a payment for given Id - partial payment is not supported",
+                "summary": "Update a payment for given ID - partial payment is not supported",
                 "operationId": "update-payment",
                 "responses": {
                     "204": {
@@ -185,7 +185,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Delete a payment for given Id",
+                "summary": "Delete a payment for given ID",
                 "operationId": "delete-payment",
                 "responses": {
                     "204": {

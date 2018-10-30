@@ -51,4 +51,8 @@ github.com/payment-service/repository/repository.go:77.2,78.19 2 0
 github.com/payment-service/repository/repository.go:67.16,69.3 1 0
 github.com/payment-service/repository/repository.go:74.16,75.13 1 0
 mode: atomic
+github.com/payment-service/service/service.go:16.114,19.2 2 1
+github.com/payment-service/service/service.go:22.161,26.2 3 1
+github.com/payment-service/service/service.go:29.41,31.2 1 1
+github.com/payment-service/service/service.go:34.51,36.2 1 1
 mode: atomic
