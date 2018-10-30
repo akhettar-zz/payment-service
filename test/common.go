@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 )
 
 const (
@@ -70,7 +71,7 @@ func AssertForCallErrorAndHttpStatusCode(err error, t *testing.T, code int, expe
 
 // Helper method to create a payment
 func CreatePaymentAndAssertResponse(t *testing.T, handler *api.PaymentHandler) model.CreatePaymentResponse {
-	body := CreatePaymentRequest("31926819", "GB29XABC10161234567801")
+	body := CreatePaymentRequest("31926819", "GB29XABC10161234567801", "GBP")
 	bytes, _ := json.Marshal(body)
 	logger.Info.Println(string(bytes))
 	w := httptest.NewRecorder()
@@ -93,10 +94,10 @@ func CreatePaymentAndAssertResponse(t *testing.T, handler *api.PaymentHandler) m
 }
 
 // Helper function to build CreatePaymentRequest
-func CreatePaymentRequest(beneficiaryAccNum, debtorAccNum string) model.CreatePaymentRequest {
+func CreatePaymentRequest(beneficiaryAccNum, debtorAccNum, beneficiaryCurrency string) model.CreatePaymentRequest {
 	beneficiary := model.Party{AccountName: "W Owens", AccountNumber: beneficiaryAccNum, AccountNumberCode: "BBAN",
 		AccountType: 0, Address: "1 The Beneficiary Localtown SE2", BankId: "403000", BankIdCode: "GBDSC",
-		Name: "Wilfred Jeremiah Owens", Currency: "USD"}
+		Name: "Wilfred Jeremiah Owens", Currency: beneficiaryCurrency}
 
 	debtor := model.Party{AccountName: "EJ Brown Black", AccountNumber: debtorAccNum, AccountNumberCode: "IBAN",
 		AccountType: 0, Address: "10 Debtor Crescent Sourcetown NE1", BankId: "203301", BankIdCode: "GBDSC",
@@ -106,5 +107,6 @@ func CreatePaymentRequest(beneficiaryAccNum, debtorAccNum string) model.CreatePa
 		Amount: 200.42, BeneficiaryParty: beneficiary, DebtorParty: debtor, PaymentPurpose: "Paying for goods/services",
 		PaymentScheme: "FPS", PaymentType: "Credit", Reference: "Payment for Em's piano lessons",
 		SchemePaymentSubType: "InternetBanking", SchemePaymentType: "ImmediatePayment",
-		SponsorParty: model.SponsorParty{AccountNumber: "56781234", BankId: "123123", BankIdCode: "GBDSC"}, BearerCode: "SHAR"}
+		SponsorParty: model.SponsorParty{AccountNumber: "56781234", BankId: "123123", BankIdCode: "GBDSC"},
+		BearerCode:   "SHAR", ProcessingDate: time.Now()}
 }

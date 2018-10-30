@@ -38,6 +38,7 @@ type CreatePaymentRequest struct {
 	PaymentID            string       `json:"payment_id"`
 	Amount               float64      `json:"amount" binding:"required"`
 	BearerCode           string       `json:"bearer_code" binding:"required"`
+	ProcessingDate       time.Time    `json:"processing_date"`
 }
 
 type CreatePaymentResponse struct {

@@ -13,7 +13,6 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"mime"
 	"net/http"
-	"time"
 )
 
 const (
@@ -67,18 +66,23 @@ func (h *PaymentHandler) CreatePayment(c *gin.Context) {
 	logger.Info.Printf("Received request to create payment for organisationId: %s", req.OrganisationID)
 
 	// Get exchange rate from the mock service
-	_, res := h.fx.GetExchangeRate(req.BeneficiaryParty.Currency, req.DebtorParty.Currency, req.Amount)
+	fx := model.ForeignExchange{ExchangeRate: 1.0}
+
+	if foreignExchangeRequired(req) {
+		_, fx = h.fx.GetExchangeRate(req.BeneficiaryParty.Currency, req.DebtorParty.Currency, req.Amount)
+	}
 
 	// calculate the new amount based on the exchange rate
-	amount := getAmount(req.Amount, res.ExchangeRate)
+	amount := getAmount(req.Amount, fx.ExchangeRate)
 
 	// Get charges information from the mock service
-	_, charges := h.ch.GetCharges(res.ExchangeRate, req.BearerCode, req.BeneficiaryParty.Currency, req.DebtorParty.Currency)
+	_, charges := h.ch.GetCharges(fx.ExchangeRate, req.BearerCode, req.BeneficiaryParty.Currency, req.DebtorParty.Currency)
 
 	// persisting payment into database
-	payment := buildPayment(amount, res, charges, req)
+	payment := buildPayment(amount, fx, charges, req)
 	logger.Info.Printf("Storing payment with Id %s", payment.Id.Hex())
 	err := h.repo.Insert(DatabaseName, CollectionName, payment)
+
 	if err != nil {
 		logger.Error.Println(err.Error())
 		setErrorResponse("Failed to create payment", http.StatusInternalServerError, c)
@@ -194,16 +198,20 @@ func (h *PaymentHandler) UpdatePayment(c *gin.Context) {
 	logger.Info.Printf("Received request to update payment for payment Id: %s", id)
 
 	// Get exchange rate from the mock service
-	_, res := h.fx.GetExchangeRate(req.BeneficiaryParty.Currency, req.DebtorParty.Currency, req.Amount)
+	fx := model.ForeignExchange{ExchangeRate: 1.0}
+
+	if foreignExchangeRequired(req) {
+		_, fx = h.fx.GetExchangeRate(req.BeneficiaryParty.Currency, req.DebtorParty.Currency, req.Amount)
+	}
 
 	// calculate the new amount based on the exchange rate
-	amount := getAmount(req.Amount, res.ExchangeRate)
+	amount := getAmount(req.Amount, fx.ExchangeRate)
 
 	// Get charges information from the mock service
-	_, charges := h.ch.GetCharges(res.ExchangeRate, req.BearerCode, req.BeneficiaryParty.Currency, req.DebtorParty.Currency)
+	_, charges := h.ch.GetCharges(fx.ExchangeRate, req.BearerCode, req.BeneficiaryParty.Currency, req.DebtorParty.Currency)
 
 	// persisting payment into database
-	payment := updatePayment(amount, res, charges, req, bson.ObjectIdHex(id))
+	payment := updatePayment(amount, fx, charges, req, bson.ObjectIdHex(id))
 	logger.Info.Printf("Updating payment with Id %s", payment.Id.Hex())
 	err := h.repo.Update(DatabaseName, CollectionName, bson.ObjectIdHex(id), payment)
 	if err != nil {
@@ -262,12 +270,17 @@ func updatePayment(amount float64, fx model.ForeignExchange, charges model.Charg
 	return model.Payment{Type: "Payment", Id: oid, OrganisationId: req.OrganisationID, Attributes: attr, Version: 0}
 }
 
+// Helper function to determine if foreign exchange to this payment is relevant
+func foreignExchangeRequired(req model.CreatePaymentRequest) bool {
+	return req.DebtorParty.Currency != req.BeneficiaryParty.Currency
+}
+
 // Helper function to build payment attributes
 func buildAttr(amount float64, req model.CreatePaymentRequest, charges model.ChargesInformation, fx model.ForeignExchange) model.Attributes {
 	attr := model.Attributes{Amount: amount, BeneficiaryParty: req.BeneficiaryParty, DebtorParty: req.DebtorParty,
 		ChargesInformation: charges, Currency: req.BeneficiaryParty.Currency, EndToEndReference: req.EndToEndReference,
 		Fx: fx, NumericReference: req.NumericReference, PaymentID: req.PaymentID, PaymentPurpose: req.PaymentPurpose,
-		PaymentScheme: req.PaymentScheme, PaymentType: req.PaymentType, ProcessingDate: time.Now(), Reference: req.Reference,
+		PaymentScheme: req.PaymentScheme, PaymentType: req.PaymentType, ProcessingDate: req.ProcessingDate, Reference: req.Reference,
 		SchemePaymentSubType: req.SchemePaymentSubType, SchemePaymentType: req.SchemePaymentType, SponsorParty: req.SponsorParty}
 	return attr
 }

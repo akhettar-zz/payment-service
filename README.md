@@ -1,5 +1,16 @@
 # Payment Service
 
+## Swagger
+
+We are using gin-swagger (https://github.com/swaggo/gin-swagger) - see the comments added in each endpoint handler (`api/handler.go`)
+
+You can access swagger documentation: http://localhost:8080/swagger/index.html. The swagger doc has already been generated
+
+To generate a newer version of the operations to be exposed. Run these steps:
+1. Install the swag tool using this script: `./scripts/install_swag.sh`
+2. Run `swag init`. This will generate a new swagger docs file see - `./docs/docs.go`
+
+
 ## Setting up GO environment and package management tool
 
 ### Install docker
@@ -31,17 +42,6 @@ export PATH=$PATH:$GOPATH/bin
 Note when you run the test for the first time it will take some time. The test run a `cockroach database` docker container in the background 
 
 `scripts/./run-tests.sh`
-
-## Swagger
-
-We are using gin-swagger (https://github.com/swaggo/gin-swagger) - see the comments added in each endpoint handler (`api/handler.go`)
-
-You can access swagger documentation: http://localhost:8080/swagger/index.html. The swagger doc has already been generated
-
-To generate a newer version of the operations to be exposed. Run these steps:
-1. Install the swag tool using this script: `./scripts/install_swag.sh`
-2. Run `swag init`. This will generate a new swagger docs file see - `./docs/docs.go`
-
 
 ## Running the server
 

@@ -13,8 +13,11 @@ import (
 )
 
 const (
-	urlFx = "url1" // dummy url for FX service
-	urlCh = "url2" // dummy url for Charges service
+	urlFx                 = "url1" // dummy url for FX service
+	urlCh                 = "url2" // dummy url for Charges service
+	beneficiaryCurrency   = "USD"
+	debtorAccountNumb     = "GB29XABC10161234567801"
+	beneficiaryAccountNum = "31926819"
 )
 
 func TestCarPaymentHandler_Health(t *testing.T) {
@@ -38,7 +41,36 @@ func TestPaymentHandler_CreatePayment(t *testing.T) {
 	{
 		t.Logf("\tWhen sending Create Payment request to endpoint %s", "\\payment")
 		{
-			body := test.CreatePaymentRequest("31926819", "GB29XABC10161234567801")
+			body := test.CreatePaymentRequest(beneficiaryAccountNum, debtorAccountNumb, beneficiaryCurrency)
+
+			bytes, _ := json.Marshal(body)
+			logger.Info.Println(string(bytes))
+			w := httptest.NewRecorder()
+
+			req, err := test.HttpRequest(body, "/payment", http.MethodPost)
+			handler := api.NewPaymentHandler(Repository, urlFx, urlCh)
+			router := handler.NewRouter()
+			router.ServeHTTP(w, req)
+
+			test.AssertForCallErrorAndHttpStatusCode(err, t, w.Code, http.StatusCreated)
+
+			var response model.CreatePaymentResponse
+			json.NewDecoder(w.Body).Decode(&response)
+			if response.Id != "" {
+				t.Logf("\t\tThe response should contain payment id. %v %v", response.Id, test.CheckMark)
+			} else {
+				t.Errorf("\t\tThe response should contain payment id. %v %v", response.Id, test.BallotX)
+			}
+		}
+	}
+}
+
+func TestPaymentHandler_CreatePaymentForeignExchangeNotRequired(t *testing.T) {
+	t.Logf("Given the need to create a payment")
+	{
+		t.Logf("\tWhen sending Create Payment request to endpoint %s", "\\payment")
+		{
+			body := test.CreatePaymentRequest(beneficiaryAccountNum, debtorAccountNumb, "GBP")
 
 			bytes, _ := json.Marshal(body)
 			logger.Info.Println(string(bytes))
@@ -242,7 +274,7 @@ func TestPaymentHandler_SuccessfulUpdatePaymentShouldReturn204(t *testing.T) {
 
 			// update payment
 			newDebtorAccNum := "GB29XABC101613434343"
-			update := test.CreatePaymentRequest("31926819", newDebtorAccNum)
+			update := test.CreatePaymentRequest(beneficiaryAccountNum, newDebtorAccNum, beneficiaryCurrency)
 			req, err := test.HttpRequest(update, "/payment/"+res.Id, http.MethodPut)
 
 			w := httptest.NewRecorder()
@@ -280,7 +312,7 @@ func TestPaymentHandler_AttemptUpdatePaymentNotFoundShouldReturn404(t *testing.T
 
 			// update payment
 			newDebtorAccNum := "GB29XABC101613434343"
-			update := test.CreatePaymentRequest("31926819", newDebtorAccNum)
+			update := test.CreatePaymentRequest(beneficiaryAccountNum, newDebtorAccNum, beneficiaryCurrency)
 			dummyId := bson.NewObjectId()
 			req, err := test.HttpRequest(update, "/payment/"+dummyId.Hex(), http.MethodPut)
 

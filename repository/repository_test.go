@@ -12,7 +12,7 @@ func TestMongoRepository_InsertShoulBeSuccessful(t *testing.T) {
 	{
 		t.Logf("\tWhen Inserting objct into DB")
 		{
-			payment := test.CreatePaymentRequest("31926819", "dfa8888434348")
+			payment := test.CreatePaymentRequest("31926819", "dfa8888434348", "USD")
 			err := repository.RepositoryUnderTest.Insert("paymentDb", "payments", payment)
 			if err == nil {
 				t.Logf("\t\tThe insert should have been successful %v", test.CheckMark)

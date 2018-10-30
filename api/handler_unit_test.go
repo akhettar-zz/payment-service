@@ -24,7 +24,7 @@ func TestCratePayment_DBFailureShouldReturn500(t *testing.T) {
 			mockRepo := mocks.NewMockRepository(mockCtrl)
 
 			expectedErrorMessage := "Failed to create payment"
-			body := test.CreatePaymentRequest("31926819", "GB29XABC10161234567801")
+			body := test.CreatePaymentRequest("31926819", "GB29XABC10161234567801", "USD")
 			err := errors.New(expectedErrorMessage)
 
 			// set mock expectation
@@ -62,7 +62,7 @@ func TestDeletePayment_DBFailureShouldReturn500(t *testing.T) {
 			mockRepo := mocks.NewMockRepository(mockCtrl)
 
 			expectedErrorMessage := "Failed to delete payment"
-			body := test.CreatePaymentRequest("31926819", "GB29XABC10161234567801")
+			body := test.CreatePaymentRequest("31926819", "GB29XABC10161234567801", "USD")
 			err := errors.New(expectedErrorMessage)
 
 			// set mock expectation
