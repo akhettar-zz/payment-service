@@ -6,11 +6,13 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
+// PaymentResponse type
 type PaymentResponse struct {
 	Data  []Payment `json:"data"`
 	Links `json:"links"`
 }
 
+// ErrorResponse generic error response
 type ErrorResponse struct {
 	Message string `json:"message"`
 	Code    int    `json:code`

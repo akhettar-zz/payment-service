@@ -1,5 +1,11 @@
 # Payment Service
 
+[![codecov](https://codecov.io/gh/akhettar/payment-service/branch/master/graph/badge.svg)](https://codecov.io/gh/akhettar/payment-service)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ef4c7c66283d4ab2b8e8c6d1dd71f191)](https://www.codacy.com/app/akhettar/payment-service?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=akhettar/payment-service&amp;utm_campaign=Badge_Grade)
+
+Payment service aims to process payment thorugh various payment systems such as SWIFT, CHAPS etc.
+
+
 ## Swagger
 
 We are using gin-swagger (https://github.com/swaggo/gin-swagger) - see the comments added in each endpoint handler (`api/handler.go`)
