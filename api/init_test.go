@@ -1,7 +1,7 @@
 package api_test
 
 import (
-	"github.com/payment-service/repository"
+	"payment-service/repository"
 	"io/ioutil"
 	"os"
 	"testing"

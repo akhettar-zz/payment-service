@@ -106,4 +106,4 @@ To generate a mock for an interface run the followings:
 
 To gnerate the mock repository run the following command:
 1 - Create `mock` directory.
-2 - `$GOPATH/bin/mockgen -destination=mocks/mock_repository.go -package=mocks github.com/payment-service/repository Repository`
+2 - `$GOPATH/bin/mockgen -destination=mocks/mock_repository.go -package=mocks payment-service/repository Repository`

@@ -3,9 +3,9 @@ package test
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/payment-service/api"
-	"github.com/payment-service/logger"
-	"github.com/payment-service/model"
+	"payment-service/api"
+	"payment-service/logger"
+	"payment-service/model"
 	"net/http"
 	"net/http/httptest"
 	"testing"

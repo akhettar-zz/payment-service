@@ -1,8 +1,8 @@
 package service_test
 
 import (
-	"github.com/payment-service/service"
-	"github.com/payment-service/test"
+	"payment-service/service"
+	"payment-service/test"
 	"testing"
 )
 

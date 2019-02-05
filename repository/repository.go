@@ -5,7 +5,7 @@ import (
 
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
-	"github.com/payment-service/model"
+	"payment-service/model"
 )
 
 // MongoRepository type

@@ -2,10 +2,10 @@ package api_test
 
 import (
 	"encoding/json"
-	"github.com/payment-service/api"
-	"github.com/payment-service/logger"
-	"github.com/payment-service/model"
-	"github.com/payment-service/test"
+	"payment-service/api"
+	"payment-service/logger"
+	"payment-service/model"
+	"payment-service/test"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"net/http/httptest"

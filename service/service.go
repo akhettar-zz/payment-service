@@ -1,6 +1,6 @@
 package service
 
-import "github.com/payment-service/model"
+import "payment-service/model"
 
 // FXService the foreign exchange service
 type FXService struct {

@@ -1,6 +1,6 @@
 FROM golang:1.8
 
-ENV SRC_FOLDER /go/src/github.com/payment-service
+ENV SRC_FOLDER /go/src/payment-service
 ENV CONFIG_FOLDER /go/config
 ENV PKG_FOLDER /go/pkg
 ENV MONGO_URL mongodb://mongo:27017/payment-db

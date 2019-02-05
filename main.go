@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/payment-service/api"
-	_ "github.com/payment-service/docs"
-	"github.com/payment-service/repository"
+	"payment-service/api"
+	_ "payment-service/docs"
+	"payment-service/repository"
 	"log"
 	"net/http"
 	"os"

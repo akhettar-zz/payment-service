@@ -2,9 +2,9 @@ package repository_test
 
 import (
 	"github.com/globalsign/mgo/bson"
-	"github.com/payment-service/model"
-	"github.com/payment-service/repository"
-	"github.com/payment-service/test"
+	"payment-service/model"
+	"payment-service/repository"
+	"payment-service/test"
 	"testing"
 )
 
